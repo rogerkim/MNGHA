@@ -1,0 +1,168 @@
+﻿@model IEnumerable<Homework.VM.CustomerVM>
+@{
+    ViewBag.Title = "Search Customer";
+}
+
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.13/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.js"></script>
+
+<style>
+    tfoot input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
+    }
+</style>
+<script>
+    var table;
+
+    $(document).ready(function () {
+        // init
+        $("#section3").addClass("active");
+
+        // Setup - add a text input to each footer cell
+        $('#tblCustomer tfoot th').each( function () {
+            var title = $(this).text();
+            $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+        } );
+
+        // DataTable
+        var data = @Html.Raw(Json.Encode(Model));
+        table = $('#tblCustomer').DataTable({
+            data: data,
+            columns: [
+                { data: 'Name' },
+                { data: 'Type' },
+                { data: 'Category' },
+                { data: 'Address' },
+                { data: 'Mobile' },
+                { data: 'Telephone' },
+                { data: 'Fax' }
+            ]
+        });
+
+        // Apply the search
+        table.columns().every( function () {
+            var that = this;
+
+            $( 'input', this.footer() ).on( 'keyup change', function () {
+                if ( that.search() !== this.value ) {
+                    that
+                        .search( this.value )
+                        .draw();
+                }
+            } );
+        } );
+
+        $("#btnExcel").click(function(){
+            sendExcel(GetTableValue());
+            //var result = JSON.stringify(GetTableValue());
+            //window.location.href = "./ExportToExcel?customerList=" + result;
+        });
+
+        $("#btnXML").click(function(){
+            sendXML(GetTableValue());
+            //var result = JSON.stringify(GetTableValue());
+            //window.location.href = "./ExportToXML?customerList=" + result;
+        });
+
+        function Customer(Name, Type, Category, Address, Mobile, Telephone, Fax) {
+            this.Name = Name;
+            this.Type = Type;
+            this.Category = Category;
+            this.Address = Address;
+            this.Mobile = Mobile;
+            this.Telephone = Telephone;
+            this.Fax = Fax;
+            this.KeyWord = "";
+        }
+
+        function GetTableValue() {
+            var customerList = [];
+            $('#tblCustomer tr').each(function () {
+                var Name =  $( this ).find('td:eq(0)').text();
+                var Type =  $( this ).find('td:eq(1)').text();
+                var Category =  $( this ).find('td:eq(2)').text();
+                var Address = $( this ).find('td:eq(3)').text();
+                var Mobile = $( this ).find('td:eq(4)').text();
+                var Telephone =  $( this ).find('td:eq(5)').text();
+                var Fax =  $( this ).find('td:eq(6)').text();
+                if(!(Name == "")){
+                    customerList.push(new Customer(Name, Type, Category, Address, Mobile, Telephone, Fax));
+                }
+            });
+            return customerList;
+        }
+
+        function sendXML(data) {
+            $.ajax({
+                url: '@Url.Action("ExportToXML", "section3")',
+                type: "POST",
+                contentType: 'application/json',
+                data: JSON.stringify({customerList: data}),
+                success: function (data) {
+                    window.location.href = '@Url.Action("XML", "section3")';
+                },
+                error: function (jqXHR, exception) {
+                    alert('There was a error during the tracnsaction!');
+                }
+            });
+        }
+
+        function sendExcel(data) {
+            $.ajax({
+                url: '@Url.Action("ExportToXML", "section3")',
+                type: "POST",
+                contentType: 'application/json',
+                data: JSON.stringify({customerList: data}),
+                success: function (data) {
+                    window.location.href = '@Url.Action("ExportToExcel", "section3")';
+                },
+                error: function (jqXHR, exception) {
+                    alert('There was a error during the tracnsaction!');
+                }
+            });
+        }
+    });
+</script>
+
+<h2>Search Customer</h2>
+<hr>
+
+<div class="row">
+    <div class="col-md-4">
+        <button id="btnExcel" class="btn btn-default" type="button">
+            <span class="glyphicon glyphicon-download" aria-hidden="true"></span> Export Excel
+        </button>&nbsp;
+        <button id="btnXML" class="btn btn-default" type="button">
+            <span class="glyphicon glyphicon-download" aria-hidden="true"></span> Export XML
+        </button>
+    </div>
+</div>
+
+<div class="row">&nbsp;</div>
+<div class="row">&nbsp;</div>
+<table id="tblCustomer" class="display" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Category</th>
+            <th>Address</th>
+            <th>Mobile</th>
+            <th>Telephone</th>
+            <th>Fax</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Category</th>
+            <th>Address</th>
+            <th>Mobile</th>
+            <th>Telephone</th>
+            <th>Fax</th>
+        </tr>
+    </tfoot>
+</table>

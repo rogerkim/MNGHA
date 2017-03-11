@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Technical Evaluation</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+
+    <style>
+        .overlay {
+            background: #e9e9e9;
+            display: none;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            opacity: 0.5;
+        }
+
+        .loader {
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid blue;
+            border-right: 16px solid green;
+            border-bottom: 16px solid red;
+            border-left: 16px solid pink;
+            width: 120px;
+            height: 120px;
+            -webkit-animation: spin 2s linear infinite;
+            animation: spin 2s linear infinite;
+        }
+
+        @@-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @@keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+    <script>
+        jQuery(function ($) {
+            $(document).ajaxStop(function () {
+                $(".overlay").hide();
+                $("#loading-indicator").hide();
+            });
+            $(document).ajaxStart(function () {
+                $(".overlay").show();
+                $("#loading-indicator").show();
+            });
+        });
+    </script>
+</head>
+<body>
+    <nav class="container navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="~/home/index">MNGHA</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li id="home"><a href="~/home/index"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbsp;Home</a></li>
+                <li id="section1"><a href="~/section1/index"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span>&nbsp;SECTION 1</a></li>
+                <li id="section2"><a href="~/section2/index"><span class="glyphicon glyphicon-plane" aria-hidden="true"></span>&nbsp;SECTION 2</a></li>
+                <li id="section3"><a href="~/section3/index"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp;SECTION 3</a></li>
+                <li id="section4"><a href="~/Home/section4"><span class="glyphicon glyphicon-book" aria-hidden="true"></span>&nbsp;SECTION 4</a></li>
+                <li id="ERD"><a href="~/home/ERD"><span class="glyphicon glyphicon-file" aria-hidden="true"></span>&nbsp;ERD</a></li>
+                <li id="section5"><a href="~/home/about"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;About Me</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - JINSU KIM</p>
+        </footer>
+    </div>
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        $(".nav a").on("click", function () {
+            $(".nav").find(".active").removeClass("active");
+            $(this).parent().addClass("active");
+        });
+    });
+</script>

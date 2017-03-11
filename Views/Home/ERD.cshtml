@@ -1,0 +1,42 @@
+﻿@{
+    ViewBag.Title = "ERD";
+}
+
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.13/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#ERD").addClass("active");
+    });
+</script>
+<div class="row">
+    <div class="panel panel-default col-md-6">
+        <!-- Default panel contents -->
+        <div class="panel-heading">Data Modeling</div>
+        <div class="panel-body">
+            <p>1. Invoice has customer information.</p>
+            <p>2. Invoice has list of the item and price.</p>
+            <p>3. Invoice can have differenct currency.</p>
+        </div>
+    </div>
+</div>
+<div class="row well well-lg">
+    <img src="~/img/invoice_erd.png" />
+</div>
+<div class="row">&nbsp;</div>
+<div class="row">
+    <div class="panel panel-default col-md-6">
+        <!-- Default panel contents -->
+        <div class="panel-heading">Data Modeling</div>
+        <div class="panel-body">
+            <p>1. Flight has a seats and schedule.</p>
+            <p>2. Ticket has a seats and schedule.</p>
+            <p>3. Schedule uses city information.</p>
+        </div>
+    </div>
+</div>
+<div class="row well well-lg">
+    <img src="~/img/airline_erd.png" />
+</div>
+

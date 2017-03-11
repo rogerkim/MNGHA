@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="964459c64d944ec494685daa627a59f0" Name="Diagram1" ZoomLevel="101">
+        <EntityTypeShape EntityType="HWModel.customer" Width="1.5" PointX="1.25" PointY="0.875" IsExpanded="false" />
+        <EntityTypeShape EntityType="HWModel.invoice" Width="1.5" PointX="3.875" PointY="0.875" IsExpanded="false" />
+        <EntityTypeShape EntityType="HWModel.invoicedetail" Width="1.5" PointX="6.375" PointY="0.875" IsExpanded="false" />
+        <AssociationConnector Association="HWModel.fk_customerid" ManuallyRouted="false" />
+        <AssociationConnector Association="HWModel.fk_invoiceid" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="HWModel.item" Width="1.5" PointX="6.375" PointY="1.875" IsExpanded="false" />
+        <AssociationConnector Association="HWModel.fk_itemcode" />
+        <EntityTypeShape EntityType="HWModel.currency" Width="1.5" PointX="3.875" PointY="1.875" IsExpanded="false" />
+        <AssociationConnector Association="HWModel.fk_currencycode" />
+        <EntityTypeShape EntityType="HWModel.CITY" Width="1.5" PointX="3.75" PointY="6.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="HWModel.Flight" Width="1.5" PointX="1" PointY="7.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="HWModel.Schedule" Width="1.5" PointX="3.75" PointY="7.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="HWModel.Seat" Width="1.5" PointX="1" PointY="8.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="HWModel.Ticket" Width="1.5" PointX="6.25" PointY="7.5" IsExpanded="false" />
+        <AssociationConnector Association="HWModel.FK__Schedule__Destin__7B5B524B" ></AssociationConnector>
+        <AssociationConnector Association="HWModel.FK__Schedule__Origin__7A672E12" />
+        <AssociationConnector Association="HWModel.FK__Schedule__Flight__797309D9" />
+        <AssociationConnector Association="HWModel.FK__Seat__FlightID__71D1E811" />
+        <AssociationConnector Association="HWModel.FK__Ticket__Schedule__7E37BEF6" />
+        <AssociationConnector Association="HWModel.FK__Ticket__7F2BE32F" ManuallyRouted="false" >
+        </AssociationConnector>
+        <EntityTypeShape EntityType="HWModel.Customer_Sample" Width="1.5" PointX="10.5" PointY="5" IsExpanded="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

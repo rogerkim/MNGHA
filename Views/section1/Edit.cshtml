@@ -1,0 +1,185 @@
+﻿@model Homework.VM.InvoiceVM
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit Invoice</h2>
+<hr>
+<form class="form-horizontal">
+    <div class="form-group">
+        <div class="col-sm-2">
+            Customer Name:
+        </div>
+        <div class="col-sm-6">
+            @Html.DropDownListFor(model => model.CustomerID, ViewBag.CustomerList as IEnumerable<SelectListItem>, "-- Select Customer --", new { @class = "dropdown" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2">
+            Currency:
+        </div>
+        <div class="col-sm-6">
+            @Html.DropDownListFor(model => model.Currency, ViewBag.CurrencyList as IEnumerable<SelectListItem>, "-- Select Currency --", new { @class = "dropdown" })
+        </div>
+    </div>
+    <hr>
+    <div class="form-group">
+        <div class="col-sm-2">
+            Item:
+        </div>
+        <div class="col-sm-6">
+            @Html.DropDownListFor(model => model.Detail.FirstOrDefault().ItemCode, ViewBag.ItemList as IEnumerable<SelectListItem>, "-- Select Item --", new { @class = "dropdown" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2">
+            Quantity:
+        </div>
+        <div class="col-sm-2">
+            @Html.EditorFor(model => model.Detail.FirstOrDefault().Qty, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2">
+            Price:
+        </div>
+        <div class="col-sm-2">
+            @Html.EditorFor(model => model.Detail.FirstOrDefault().Price, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+</form>
+<button id="btnAddRow" class="btn btn-default">Add</button>
+<hr>
+<div class="container">
+    <table class="table table-striped" id="InvoiceTable">
+        <thead>
+            <tr>
+                <th>Item Code</th>
+                <th>Description</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th>Total</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ decimal total = 0;}
+            @foreach (var item in Model.Detail)
+            {
+                total = item.Price * item.Qty;
+                <tr>
+                    <td class="itemcode">@item.ItemCode</td>
+                    <td class="description">@item.Description</td>
+                    <td class="qty">@item.Qty</td>
+                    <td class="price">@item.Price.ToString("0.00")</td>
+                    <td><span>@total.ToString("0.00")</span></td>
+                    <td>
+                        <button type="button" class="btn btn-default btn-sm btnRemove">
+                            <span class="glyphicon glyphicon-remove"></span> Remove
+                        </button>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    <button id="btnSubmit" type="submit" class="btn btn-default">Submit</button>
+</div>
+<br />
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+<div class="overlay">
+    <div id="loading-indicator" class="loader" style="position: fixed; left: 50%; top: 50%; display: none;"></div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#section1").addClass("active");
+        // Init
+        AddRemoveBtnHandler();
+        $("#Qty").val(0);
+        $("#Price").val(0);
+
+        // Add btn handler
+        $("#btnAddRow").click(function () {
+            var itemCode = $("#ItemCode").val();
+            var description = $("#ItemCode option:selected").text();
+            var qty = $("#Qty").val();
+            var price = $("#Price").val();
+            var total = qty * price;
+            var row = "<tr><td class='itemcode'>" + itemCode + "</td><td class='description'>" + description + "</td><td class='qty'>" +
+                qty + "</td><td class='price'>" + price + "</td><td>" + total +
+                "</td><td><button type='button' class='btn btn-default btn-sm btnRemove'>" +
+                "<span class='glyphicon glyphicon-remove'></span> Remove</button></td></tr>";
+            $("#InvoiceTable").append(row);
+            AddRemoveBtnHandler();
+        });
+
+        // Submit btn handler
+        $("#btnSubmit").click(function () {
+            var customerID = $("#CustomerID").val();
+            var currency = $("#Currency").val();
+            GetTableValue();
+            var data = new InvoiceVM(customerID, currency, InvoiceDetailArray);
+            sendForm(data);
+        });
+    });
+
+    function AddRemoveBtnHandler() {
+        $(".btnRemove").click(function () {
+        $(this).closest('tr').remove();
+        });
+    }
+
+    function InvoiceVM(customerID, currency, detail) {
+        this.CustomerID = customerID;
+        this.CustomerName = "";
+        this.CustomerAddress = "";
+        this.InvoiceID = "@ViewBag.InvoiceID";
+        this.Currency = currency;
+        this.Total = "";
+        this.AddDate = "";
+        this.Detail = detail;
+    }
+
+    function InvoiceDetail(itemcode, qty, price) {
+        this.ItemCode = itemcode;
+        this.Qty = qty;
+        this.Price = price;
+        this.Description = "";
+    }
+
+    function sendForm(data) {
+        $.ajax({
+            url: "Edit",
+            type: "POST",
+            data: data,
+            success: function (data) {
+                alert("You have successfully edited!");
+                window.location.href = '@Url.Action("index", "section1")';
+            },
+            error: function (jqXHR, exception) {
+                alert('There was a error during the tracnsaction!');
+            }
+        });
+    }
+
+    var InvoiceDetailArray = new Array();
+
+    function GetTableValue() {
+        var count = 0;
+        var skipFirst = false;
+        $('#InvoiceTable tr').each(function () {
+            var itemCode = $(this).find(".itemcode").html();
+            var qty = $(this).find(".qty").html();
+            var price = $(this).find(".price").html();
+            if (skipFirst) {
+                InvoiceDetailArray[count++] = new InvoiceDetail(itemCode, qty, price);
+            }
+            skipFirst = true;
+        });
+    }
+</script>

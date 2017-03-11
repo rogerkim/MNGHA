@@ -1,0 +1,149 @@
+﻿@model Homework.VM.InvoiceVM
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<style>
+.centered-text {
+    text-align:center
+}  
+</style>
+
+<div>
+    <h2>Invoice Detail</h2>
+    <hr />
+</div>
+
+<div class="row">
+    <div class="col-md-12 centered-text">
+        <h2><b>CUSTOMER SALES INVOICE</b></h2>
+    </div>
+</div>
+
+<div class="row">&nbsp;</div>
+
+<div class="row">
+    <div class="col-md-7 centered-text">
+        <b>Customer Information:</b>
+    </div>
+    <div class="col-md-5">
+        <b>Invoice ID:&nbsp;</b>@Model.InvoiceID
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-7">
+        <b>ID:&nbsp;</b>@Model.CustomerID
+    </div>
+    <div class="col-md-5">
+        <b>Invoice Date:&nbsp;</b>@Model.AddDate
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-7">
+        <b>Name:&nbsp;</b>@Model.CustomerName
+    </div>
+    <div class="col-md-5">
+        <b>Page:&nbsp;</b>1/1
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-7">
+        <b>Address:&nbsp;</b>@Model.CustomerAddress
+    </div>
+    <div class="col-md-5">
+        <b>Currency:&nbsp;</b>@Model.Currency
+    </div>
+</div>
+
+<br />
+
+<table class="table">
+    <tr>
+        <th>
+            Line#
+        </th>
+        <th>
+            Item Code
+        </th>
+        <th>
+            Description
+        </th>
+        <th>
+            Quantity
+        </th>
+        <th>
+            Price
+        </th>
+        <th>
+            Total
+        </th>
+    </tr>
+
+    @{int i = 0;}
+    @{decimal total = 0, sum = 0;}
+    @foreach (var item in Model.Detail)
+    {
+        i++;
+        total = item.Qty * item.Price;
+        sum += total;
+        <tr>
+            <td>
+                <span>@i</span>
+            </td>
+            <td>
+                @Html.DisplayFor(m => item.ItemCode)
+            </td>
+            <td>
+                @Html.DisplayFor(m => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(m => item.Qty)
+            </td>
+            <td>
+                @Html.DisplayFor(m => item.Price)
+            </td>
+            <td>
+                <span>@total.ToString("0.00")</span>
+            </td>
+        </tr>
+    }
+    <tr>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+            <b>Grand Total:</b>
+        </td>
+        <td>
+            <span>@sum.ToString("0.00")</span>
+        </td>
+    </tr>
+</table>
+
+<div class="row">
+    <div class="col-md-5">
+        <button id="btnReport" type="button" class="btn btn-primary">Generate Report</button>
+    </div>
+</div>
+
+<div class="overlay">
+    <div id="loading-indicator" class="loader" style="position: fixed; left: 50%; top: 50%; display: none;"></div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#section1").addClass("active");
+        $( "#btnReport" ).click(function() {
+            window.location.href = "../../Report/InvoiceReport.aspx?param=" + encodeURIComponent('@ViewBag.IntInvoiceID');
+        });
+    });
+</script>

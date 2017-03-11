@@ -1,0 +1,736 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="HWModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CITY">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="currency">
+          <Key>
+            <PropertyRef Name="currencycode" />
+          </Key>
+          <Property Name="currencycode" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="description" Type="nvarchar" MaxLength="20" />
+          <Property Name="adddate" Type="datetime" />
+          <Property Name="editdate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="customer">
+          <Key>
+            <PropertyRef Name="customerid" />
+          </Key>
+          <Property Name="customerid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" />
+          <Property Name="address" Type="nvarchar" MaxLength="100" />
+          <Property Name="adddate" Type="datetime" />
+          <Property Name="editdate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Customer_Sample">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="30" />
+          <Property Name="Type" Type="nvarchar" MaxLength="20" />
+          <Property Name="Category" Type="nvarchar" MaxLength="20" />
+          <Property Name="Address" Type="nvarchar" MaxLength="255" />
+          <Property Name="Mobile" Type="nvarchar" MaxLength="20" />
+          <Property Name="Telephone" Type="nvarchar" MaxLength="20" />
+          <Property Name="Fax" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="Flight">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="invoice">
+          <Key>
+            <PropertyRef Name="invoiceid" />
+          </Key>
+          <Property Name="invoiceid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="customerid" Type="int" Nullable="false" />
+          <Property Name="currencycode" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="adddate" Type="datetime" />
+          <Property Name="editdate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="invoicedetail">
+          <Key>
+            <PropertyRef Name="invoicedetailid" />
+          </Key>
+          <Property Name="invoicedetailid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="itemcode" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="quantity" Type="int" />
+          <Property Name="invoiceid" Type="int" Nullable="false" />
+          <Property Name="price" Type="money" />
+          <Property Name="adddate" Type="datetime" />
+          <Property Name="editdate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="item">
+          <Key>
+            <PropertyRef Name="itemcode" />
+          </Key>
+          <Property Name="itemcode" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="description" Type="nvarchar" MaxLength="100" />
+          <Property Name="adddate" Type="datetime" />
+          <Property Name="editdate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Schedule">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FlightID" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Origin" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Destination" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="DepartTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Seat">
+          <Key>
+            <PropertyRef Name="FlightID" />
+            <PropertyRef Name="SeatID" />
+          </Key>
+          <Property Name="FlightID" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="SeatID" Type="nvarchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Ticket">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerName" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="ScheduleID" Type="int" Nullable="false" />
+          <Property Name="FlightID" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="SeatID" Type="nvarchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Schedule__Destin__7B5B524B">
+          <End Role="CITY" Type="Self.CITY" Multiplicity="1" />
+          <End Role="Schedule" Type="Self.Schedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CITY">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Schedule">
+              <PropertyRef Name="Destination" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Schedule__Flight__797309D9">
+          <End Role="Flight" Type="Self.Flight" Multiplicity="1" />
+          <End Role="Schedule" Type="Self.Schedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Flight">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Schedule">
+              <PropertyRef Name="FlightID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Schedule__Origin__7A672E12">
+          <End Role="CITY" Type="Self.CITY" Multiplicity="1" />
+          <End Role="Schedule" Type="Self.Schedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CITY">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Schedule">
+              <PropertyRef Name="Origin" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Seat__FlightID__71D1E811">
+          <End Role="Flight" Type="Self.Flight" Multiplicity="1" />
+          <End Role="Seat" Type="Self.Seat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Flight">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Seat">
+              <PropertyRef Name="FlightID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Ticket__7F2BE32F">
+          <End Role="Seat" Type="Self.Seat" Multiplicity="1" />
+          <End Role="Ticket" Type="Self.Ticket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Seat">
+              <PropertyRef Name="FlightID" />
+              <PropertyRef Name="SeatID" />
+            </Principal>
+            <Dependent Role="Ticket">
+              <PropertyRef Name="FlightID" />
+              <PropertyRef Name="SeatID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Ticket__Schedule__7E37BEF6">
+          <End Role="Schedule" Type="Self.Schedule" Multiplicity="1" />
+          <End Role="Ticket" Type="Self.Ticket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Schedule">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Ticket">
+              <PropertyRef Name="ScheduleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_currencycode">
+          <End Role="currency" Type="Self.currency" Multiplicity="1" />
+          <End Role="invoice" Type="Self.invoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="currency">
+              <PropertyRef Name="currencycode" />
+            </Principal>
+            <Dependent Role="invoice">
+              <PropertyRef Name="currencycode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_customerid">
+          <End Role="customer" Type="Self.customer" Multiplicity="1" />
+          <End Role="invoice" Type="Self.invoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="customerid" />
+            </Principal>
+            <Dependent Role="invoice">
+              <PropertyRef Name="customerid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_invoiceid">
+          <End Role="invoice" Type="Self.invoice" Multiplicity="1" />
+          <End Role="invoicedetail" Type="Self.invoicedetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="invoice">
+              <PropertyRef Name="invoiceid" />
+            </Principal>
+            <Dependent Role="invoicedetail">
+              <PropertyRef Name="invoiceid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_itemcode">
+          <End Role="item" Type="Self.item" Multiplicity="1" />
+          <End Role="invoicedetail" Type="Self.invoicedetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="item">
+              <PropertyRef Name="itemcode" />
+            </Principal>
+            <Dependent Role="invoicedetail">
+              <PropertyRef Name="itemcode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="HWModelStoreContainer">
+          <EntitySet Name="CITY" EntityType="Self.CITY" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="currency" EntityType="Self.currency" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="customer" EntityType="Self.customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Customer_Sample" EntityType="Self.Customer_Sample" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Flight" EntityType="Self.Flight" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="invoice" EntityType="Self.invoice" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="invoicedetail" EntityType="Self.invoicedetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="item" EntityType="Self.item" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Schedule" EntityType="Self.Schedule" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Seat" EntityType="Self.Seat" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ticket" EntityType="Self.Ticket" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Schedule__Destin__7B5B524B" Association="Self.FK__Schedule__Destin__7B5B524B">
+            <End Role="CITY" EntitySet="CITY" />
+            <End Role="Schedule" EntitySet="Schedule" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Schedule__Flight__797309D9" Association="Self.FK__Schedule__Flight__797309D9">
+            <End Role="Flight" EntitySet="Flight" />
+            <End Role="Schedule" EntitySet="Schedule" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Schedule__Origin__7A672E12" Association="Self.FK__Schedule__Origin__7A672E12">
+            <End Role="CITY" EntitySet="CITY" />
+            <End Role="Schedule" EntitySet="Schedule" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Seat__FlightID__71D1E811" Association="Self.FK__Seat__FlightID__71D1E811">
+            <End Role="Flight" EntitySet="Flight" />
+            <End Role="Seat" EntitySet="Seat" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Ticket__7F2BE32F" Association="Self.FK__Ticket__7F2BE32F">
+            <End Role="Seat" EntitySet="Seat" />
+            <End Role="Ticket" EntitySet="Ticket" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Ticket__Schedule__7E37BEF6" Association="Self.FK__Ticket__Schedule__7E37BEF6">
+            <End Role="Schedule" EntitySet="Schedule" />
+            <End Role="Ticket" EntitySet="Ticket" />
+          </AssociationSet>
+          <AssociationSet Name="fk_currencycode" Association="Self.fk_currencycode">
+            <End Role="currency" EntitySet="currency" />
+            <End Role="invoice" EntitySet="invoice" />
+          </AssociationSet>
+          <AssociationSet Name="fk_customerid" Association="Self.fk_customerid">
+            <End Role="customer" EntitySet="customer" />
+            <End Role="invoice" EntitySet="invoice" />
+          </AssociationSet>
+          <AssociationSet Name="fk_invoiceid" Association="Self.fk_invoiceid">
+            <End Role="invoice" EntitySet="invoice" />
+            <End Role="invoicedetail" EntitySet="invoicedetail" />
+          </AssociationSet>
+          <AssociationSet Name="fk_itemcode" Association="Self.fk_itemcode">
+            <End Role="item" EntitySet="item" />
+            <End Role="invoicedetail" EntitySet="invoicedetail" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="HWModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="customer">
+          <Key>
+            <PropertyRef Name="customerid" />
+          </Key>
+          <Property Name="customerid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="adddate" Type="DateTime" Precision="3" />
+          <Property Name="editdate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="invoice" Relationship="Self.fk_customerid" FromRole="customer" ToRole="invoice" />
+        </EntityType>
+        <EntityType Name="invoice">
+          <Key>
+            <PropertyRef Name="invoiceid" />
+          </Key>
+          <Property Name="invoiceid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="customerid" Type="Int32" Nullable="false" />
+          <Property Name="adddate" Type="DateTime" Precision="3" />
+          <Property Name="editdate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="customer" Relationship="Self.fk_customerid" FromRole="invoice" ToRole="customer" />
+          <NavigationProperty Name="invoicedetail" Relationship="Self.fk_invoiceid" FromRole="invoice" ToRole="invoicedetail" />
+          <Property Name="currencycode" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="currency1" Relationship="HWModel.fk_currencycode" FromRole="invoice" ToRole="currency" />
+        </EntityType>
+        <EntityType Name="invoicedetail">
+          <Key>
+            <PropertyRef Name="invoicedetailid" />
+          </Key>
+          <Property Name="invoicedetailid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="itemcode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="quantity" Type="Int32" />
+          <Property Name="invoiceid" Type="Int32" Nullable="false" />
+          <Property Name="adddate" Type="DateTime" Precision="3" />
+          <Property Name="editdate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="invoice" Relationship="Self.fk_invoiceid" FromRole="invoicedetail" ToRole="invoice" />
+          <NavigationProperty Name="item" Relationship="HWModel.fk_itemcode" FromRole="invoicedetail" ToRole="item" />
+          <Property Name="price" Type="Decimal" Precision="19" Scale="4" />
+        </EntityType>
+        <Association Name="fk_customerid">
+          <End Role="customer" Type="Self.customer" Multiplicity="1" />
+          <End Role="invoice" Type="Self.invoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="customerid" />
+            </Principal>
+            <Dependent Role="invoice">
+              <PropertyRef Name="customerid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_invoiceid">
+          <End Role="invoice" Type="Self.invoice" Multiplicity="1" />
+          <End Role="invoicedetail" Type="Self.invoicedetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="invoice">
+              <PropertyRef Name="invoiceid" />
+            </Principal>
+            <Dependent Role="invoicedetail">
+              <PropertyRef Name="invoiceid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="HWEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="customer" EntityType="Self.customer" />
+          <EntitySet Name="invoice" EntityType="Self.invoice" />
+          <EntitySet Name="invoicedetail" EntityType="Self.invoicedetail" />
+          <AssociationSet Name="fk_customerid" Association="Self.fk_customerid">
+            <End Role="customer" EntitySet="customer" />
+            <End Role="invoice" EntitySet="invoice" />
+          </AssociationSet>
+          <AssociationSet Name="fk_invoiceid" Association="Self.fk_invoiceid">
+            <End Role="invoice" EntitySet="invoice" />
+            <End Role="invoicedetail" EntitySet="invoicedetail" />
+          </AssociationSet>
+          <EntitySet Name="item" EntityType="HWModel.item" />
+          <AssociationSet Name="fk_itemcode" Association="HWModel.fk_itemcode">
+            <End Role="item" EntitySet="item" />
+            <End Role="invoicedetail" EntitySet="invoicedetail" />
+          </AssociationSet>
+          <EntitySet Name="currency" EntityType="HWModel.currency" />
+          <AssociationSet Name="fk_currencycode" Association="HWModel.fk_currencycode">
+            <End Role="currency" EntitySet="currency" />
+            <End Role="invoice" EntitySet="invoice" />
+          </AssociationSet>
+          <EntitySet Name="CITies" EntityType="HWModel.CITY" />
+          <EntitySet Name="Flights" EntityType="HWModel.Flight" />
+          <EntitySet Name="Schedules" EntityType="HWModel.Schedule" />
+          <EntitySet Name="Seats" EntityType="HWModel.Seat" />
+          <EntitySet Name="Tickets" EntityType="HWModel.Ticket" />
+          <AssociationSet Name="FK__Schedule__Destin__7B5B524B" Association="HWModel.FK__Schedule__Destin__7B5B524B">
+            <End Role="CITY" EntitySet="CITies" />
+            <End Role="Schedule" EntitySet="Schedules" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Schedule__Origin__7A672E12" Association="HWModel.FK__Schedule__Origin__7A672E12">
+            <End Role="CITY" EntitySet="CITies" />
+            <End Role="Schedule" EntitySet="Schedules" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Schedule__Flight__797309D9" Association="HWModel.FK__Schedule__Flight__797309D9">
+            <End Role="Flight" EntitySet="Flights" />
+            <End Role="Schedule" EntitySet="Schedules" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Seat__FlightID__71D1E811" Association="HWModel.FK__Seat__FlightID__71D1E811">
+            <End Role="Flight" EntitySet="Flights" />
+            <End Role="Seat" EntitySet="Seats" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Ticket__Schedule__7E37BEF6" Association="HWModel.FK__Ticket__Schedule__7E37BEF6">
+            <End Role="Schedule" EntitySet="Schedules" />
+            <End Role="Ticket" EntitySet="Tickets" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Ticket__7F2BE32F" Association="HWModel.FK__Ticket__7F2BE32F">
+            <End Role="Seat" EntitySet="Seats" />
+            <End Role="Ticket" EntitySet="Tickets" />
+          </AssociationSet>
+          <EntitySet Name="Customer_Sample" EntityType="HWModel.Customer_Sample" />
+        </EntityContainer>
+        <EntityType Name="item">
+          <Key>
+            <PropertyRef Name="itemcode" />
+          </Key>
+          <Property Name="itemcode" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="adddate" Type="DateTime" Precision="3" />
+          <Property Name="editdate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="invoicedetail" Relationship="HWModel.fk_itemcode" FromRole="item" ToRole="invoicedetail" />
+        </EntityType>
+        <Association Name="fk_itemcode">
+          <End Type="HWModel.item" Role="item" Multiplicity="1" />
+          <End Type="HWModel.invoicedetail" Role="invoicedetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="item">
+              <PropertyRef Name="itemcode" />
+            </Principal>
+            <Dependent Role="invoicedetail">
+              <PropertyRef Name="itemcode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="currency">
+          <Key>
+            <PropertyRef Name="currencycode" />
+          </Key>
+          <Property Name="currencycode" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="adddate" Type="DateTime" Precision="3" />
+          <Property Name="editdate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="invoice" Relationship="HWModel.fk_currencycode" FromRole="currency" ToRole="invoice" />
+        </EntityType>
+        <Association Name="fk_currencycode">
+          <End Type="HWModel.currency" Role="currency" Multiplicity="1" />
+          <End Type="HWModel.invoice" Role="invoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="currency">
+              <PropertyRef Name="currencycode" />
+            </Principal>
+            <Dependent Role="invoice">
+              <PropertyRef Name="currencycode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="CITY">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Schedules" Relationship="HWModel.FK__Schedule__Destin__7B5B524B" FromRole="CITY" ToRole="Schedule" />
+          <NavigationProperty Name="Schedules1" Relationship="HWModel.FK__Schedule__Origin__7A672E12" FromRole="CITY" ToRole="Schedule" />
+        </EntityType>
+        <EntityType Name="Flight">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Schedules" Relationship="HWModel.FK__Schedule__Flight__797309D9" FromRole="Flight" ToRole="Schedule" />
+          <NavigationProperty Name="Seats" Relationship="HWModel.FK__Seat__FlightID__71D1E811" FromRole="Flight" ToRole="Seat" />
+        </EntityType>
+        <EntityType Name="Schedule">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FlightID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Origin" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Destination" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="DepartTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="CITY" Relationship="HWModel.FK__Schedule__Destin__7B5B524B" FromRole="Schedule" ToRole="CITY" />
+          <NavigationProperty Name="CITY1" Relationship="HWModel.FK__Schedule__Origin__7A672E12" FromRole="Schedule" ToRole="CITY" />
+          <NavigationProperty Name="Flight" Relationship="HWModel.FK__Schedule__Flight__797309D9" FromRole="Schedule" ToRole="Flight" />
+          <NavigationProperty Name="Tickets" Relationship="HWModel.FK__Ticket__Schedule__7E37BEF6" FromRole="Schedule" ToRole="Ticket" />
+        </EntityType>
+        <EntityType Name="Seat">
+          <Key>
+            <PropertyRef Name="FlightID" />
+            <PropertyRef Name="SeatID" />
+          </Key>
+          <Property Name="FlightID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="SeatID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Flight" Relationship="HWModel.FK__Seat__FlightID__71D1E811" FromRole="Seat" ToRole="Flight" />
+          <NavigationProperty Name="Tickets" Relationship="HWModel.FK__Ticket__7F2BE32F" FromRole="Seat" ToRole="Ticket" />
+        </EntityType>
+        <EntityType Name="Ticket">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerName" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="ScheduleID" Type="Int32" Nullable="false" />
+          <Property Name="FlightID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="SeatID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Schedule" Relationship="HWModel.FK__Ticket__Schedule__7E37BEF6" FromRole="Ticket" ToRole="Schedule" />
+          <NavigationProperty Name="Seat" Relationship="HWModel.FK__Ticket__7F2BE32F" FromRole="Ticket" ToRole="Seat" />
+        </EntityType>
+        <Association Name="FK__Schedule__Destin__7B5B524B">
+          <End Type="HWModel.CITY" Role="CITY" Multiplicity="1" />
+          <End Type="HWModel.Schedule" Role="Schedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CITY">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Schedule">
+              <PropertyRef Name="Destination" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Schedule__Origin__7A672E12">
+          <End Type="HWModel.CITY" Role="CITY" Multiplicity="1" />
+          <End Type="HWModel.Schedule" Role="Schedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CITY">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Schedule">
+              <PropertyRef Name="Origin" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Schedule__Flight__797309D9">
+          <End Type="HWModel.Flight" Role="Flight" Multiplicity="1" />
+          <End Type="HWModel.Schedule" Role="Schedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Flight">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Schedule">
+              <PropertyRef Name="FlightID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Seat__FlightID__71D1E811">
+          <End Type="HWModel.Flight" Role="Flight" Multiplicity="1" />
+          <End Type="HWModel.Seat" Role="Seat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Flight">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Seat">
+              <PropertyRef Name="FlightID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Ticket__Schedule__7E37BEF6">
+          <End Type="HWModel.Schedule" Role="Schedule" Multiplicity="1" />
+          <End Type="HWModel.Ticket" Role="Ticket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Schedule">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Ticket">
+              <PropertyRef Name="ScheduleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Ticket__7F2BE32F">
+          <End Type="HWModel.Seat" Role="Seat" Multiplicity="1" />
+          <End Type="HWModel.Ticket" Role="Ticket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Seat">
+              <PropertyRef Name="FlightID" />
+              <PropertyRef Name="SeatID" />
+            </Principal>
+            <Dependent Role="Ticket">
+              <PropertyRef Name="FlightID" />
+              <PropertyRef Name="SeatID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Customer_Sample">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Category" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Mobile" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Telephone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Fax" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="HWModelStoreContainer" CdmEntityContainer="HWEntities">
+          <EntitySetMapping Name="customer">
+            <EntityTypeMapping TypeName="HWModel.customer">
+              <MappingFragment StoreEntitySet="customer">
+                <ScalarProperty Name="customerid" ColumnName="customerid" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="adddate" ColumnName="adddate" />
+                <ScalarProperty Name="editdate" ColumnName="editdate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="invoice">
+            <EntityTypeMapping TypeName="HWModel.invoice">
+              <MappingFragment StoreEntitySet="invoice">
+                <ScalarProperty Name="currencycode" ColumnName="currencycode" />
+                <ScalarProperty Name="invoiceid" ColumnName="invoiceid" />
+                <ScalarProperty Name="customerid" ColumnName="customerid" />
+                <ScalarProperty Name="adddate" ColumnName="adddate" />
+                <ScalarProperty Name="editdate" ColumnName="editdate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="invoicedetail">
+            <EntityTypeMapping TypeName="HWModel.invoicedetail">
+              <MappingFragment StoreEntitySet="invoicedetail">
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="invoicedetailid" ColumnName="invoicedetailid" />
+                <ScalarProperty Name="itemcode" ColumnName="itemcode" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="invoiceid" ColumnName="invoiceid" />
+                <ScalarProperty Name="adddate" ColumnName="adddate" />
+                <ScalarProperty Name="editdate" ColumnName="editdate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="item">
+            <EntityTypeMapping TypeName="HWModel.item">
+              <MappingFragment StoreEntitySet="item">
+                <ScalarProperty Name="editdate" ColumnName="editdate" />
+                <ScalarProperty Name="adddate" ColumnName="adddate" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="itemcode" ColumnName="itemcode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="currency">
+            <EntityTypeMapping TypeName="HWModel.currency">
+              <MappingFragment StoreEntitySet="currency">
+                <ScalarProperty Name="editdate" ColumnName="editdate" />
+                <ScalarProperty Name="adddate" ColumnName="adddate" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="currencycode" ColumnName="currencycode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CITies">
+            <EntityTypeMapping TypeName="HWModel.CITY">
+              <MappingFragment StoreEntitySet="CITY">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Flights">
+            <EntityTypeMapping TypeName="HWModel.Flight">
+              <MappingFragment StoreEntitySet="Flight">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Schedules">
+            <EntityTypeMapping TypeName="HWModel.Schedule">
+              <MappingFragment StoreEntitySet="Schedule">
+                <ScalarProperty Name="DepartTime" ColumnName="DepartTime" />
+                <ScalarProperty Name="Destination" ColumnName="Destination" />
+                <ScalarProperty Name="Origin" ColumnName="Origin" />
+                <ScalarProperty Name="FlightID" ColumnName="FlightID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Seats">
+            <EntityTypeMapping TypeName="HWModel.Seat">
+              <MappingFragment StoreEntitySet="Seat">
+                <ScalarProperty Name="SeatID" ColumnName="SeatID" />
+                <ScalarProperty Name="FlightID" ColumnName="FlightID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tickets">
+            <EntityTypeMapping TypeName="HWModel.Ticket">
+              <MappingFragment StoreEntitySet="Ticket">
+                <ScalarProperty Name="SeatID" ColumnName="SeatID" />
+                <ScalarProperty Name="FlightID" ColumnName="FlightID" />
+                <ScalarProperty Name="ScheduleID" ColumnName="ScheduleID" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customer_Sample">
+            <EntityTypeMapping TypeName="HWModel.Customer_Sample">
+              <MappingFragment StoreEntitySet="Customer_Sample">
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Telephone" ColumnName="Telephone" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
