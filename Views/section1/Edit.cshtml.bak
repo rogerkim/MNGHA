@@ -97,8 +97,6 @@
 
 <script>
     $(document).ready(function () {
-        IsValid();
-
         $("#section1").addClass("active");
         // Init
         AddRemoveBtnHandler();
@@ -129,14 +127,6 @@
             sendForm(data);
         });
     });
-
-    function IsValid() {
-        if ($("#CustomerID").val() == '' || $("#Currency").val() == '' || $("#ItemCode").val() == '' || $("#Qty").val() == ''
-            || $("#Price").val() == '') {
-            return false;
-        }
-        return true;
-    }
 
     function AddRemoveBtnHandler() {
         $(".btnRemove").click(function () {
