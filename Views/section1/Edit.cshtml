@@ -106,7 +106,12 @@
 
         // Add btn handler
         $("#btnAddRow").click(function () {
-			IsValid();
+			// check validation
+            if (!IsValid())
+            {
+                alert("User input is not valid.");
+                return false;
+            }
             var itemCode = $("#ItemCode").val();
             var description = $("#ItemCode option:selected").text();
             var qty = $("#Qty").val();
