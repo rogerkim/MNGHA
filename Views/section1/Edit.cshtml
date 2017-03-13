@@ -97,7 +97,6 @@
 
 <script>
     $(document).ready(function () {
-        IsValid();
 
         $("#section1").addClass("active");
         // Init
@@ -107,6 +106,7 @@
 
         // Add btn handler
         $("#btnAddRow").click(function () {
+			IsValid();
             var itemCode = $("#ItemCode").val();
             var description = $("#ItemCode option:selected").text();
             var qty = $("#Qty").val();
